@@ -123,9 +123,9 @@ const FluidShader = () => {
               float n2 = fbm(uv * 2.0 - movement - mouseEffect);
               float n3 = fbm(uv * 4.0 + vec2(n1, n2));
               
-              vec3 col1 = vec3(0.2, 0.5, 0.8);
-              vec3 col2 = vec3(0.8, 0.2, 0.5);
-              vec3 col3 = vec3(0.1, 0.8, 0.4);
+              vec3 col1 = vec3(0.35, 0.22, 0.11);
+              vec3 col2 = vec3(0.47, 0.33, 0.2);
+              vec3 col3 = vec3(0.33, 0.54, 0.18);
               
               vec3 finalColor = mix(col1, col2, n1);
               finalColor = mix(finalColor, col3, n2 * 0.5);
