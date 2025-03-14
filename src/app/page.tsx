@@ -259,7 +259,7 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-emerald-500 hover:text-emerald-400 transition-colors"
                   >
-                    <FaGithub size={12} /> {process.env.NEXT_PUBLIC_COMMIT_HASH.substring(0, 7)} // extra check for less than 7 digits cos i dont want git to mess up the entire site.
+                    <FaGithub size={12} /> {process.env.NEXT_PUBLIC_COMMIT_HASH.substring(0, 7) /* extra check for less than 7 digits cos i dont want git to mess up the entire site. */}
                   </a>
                 ) : (
                   <a
