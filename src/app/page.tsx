@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import FluidBackground from "@/components/fluid-background";
 import { FaGithub } from "react-icons/fa";
 import { copyTextToClipboard } from "@/lib/clipboard";
+import ServerControls from "@/components/server-controls";
+import { toast } from "sonner";
 
 interface ServerResponse {
   online: boolean
@@ -40,7 +42,16 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [copied, setCopied] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const serverIP = "mc.veygax.dev"
+
+  useEffect(() => {
+    // Check if user has stored credentials
+    const hasStoredAuth = localStorage.getItem("mc_server_auth") !== null
+    if (hasStoredAuth) {
+      setIsAuthenticated(true)
+    }
+  }, [])
 
   const fetchServerStatus = async () => {
     setLoading(true)
@@ -88,6 +99,16 @@ export default function Home() {
     copyTextToClipboard(serverIP);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  const handleAuthenticate = () => {
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+    localStorage.removeItem("mc_server_auth")
+    toast("logged out successfully")
   }
 
   return (
@@ -204,13 +225,17 @@ export default function Home() {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3">
-            <Button
-              variant="default"
-              className="w-full bg-emerald-600 hover:bg-emerald-700 lowercase cursor-pointer"
-              onClick={() => window.open("https://discord.com/users/1119938236245094521", "_blank")}
-            >
-              dm veygax on discord
-            </Button>
+            {isAuthenticated ? (
+              <ServerControls isAuthenticated={isAuthenticated} onAuthenticate={handleAuthenticate} />
+            ) : (
+              <Button
+                variant="default"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 lowercase"
+                onClick={() => window.open("https://discord.com/users/1119938236245094521", "_blank")}
+              >
+                dm veygax on discord
+              </Button>
+            )}
 
             <Button
               variant="outline"
@@ -237,7 +262,24 @@ export default function Home() {
                 <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> refresh
               </button>
 
-              {lastUpdated && <span>updated: {lastUpdated.toLocaleTimeString()}</span>}
+              <div className="flex items-center gap-2">
+                {lastUpdated && <span>updated: {lastUpdated.toLocaleTimeString()}</span>}
+                {isAuthenticated ? (
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleLogout()
+                    }}
+                    className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                    title="looks like you dm'ed veygax :O"
+                  >
+                    logout
+                  </a>
+                ) : (
+                  <ServerControls isAuthenticated={isAuthenticated} onAuthenticate={handleAuthenticate} />
+                )}
+              </div>
             </div>
             
             <div className="w-full text-xs text-gray-500 lowercase text-center pt-2 border-t border-gray-800 mt-2">
