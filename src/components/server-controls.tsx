@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -77,11 +77,6 @@ export default function ServerControls({ isAuthenticated, onAuthenticate }: Serv
     localStorage.setItem("mc_server_auth", encryptPassword(pwd))
   }
 
-  const clearStoredPassword = () => {
-    if (typeof window === "undefined") return
-    localStorage.removeItem("mc_server_auth")
-  }
-
   const handleAuthentication = async () => {
     if (!password.trim()) return
     
@@ -106,7 +101,7 @@ export default function ServerControls({ isAuthenticated, onAuthenticate }: Serv
       } else {
         setError("incorrect password")
       }
-    } catch (err) {
+    } catch {
       setError("something went wrong")
     } finally {
       setIsLoading(false)
@@ -132,7 +127,7 @@ export default function ServerControls({ isAuthenticated, onAuthenticate }: Serv
       toast.success(`server ${action} request sent`, {
         description: `the server will ${action} shortly`,
       })
-    } catch (err) {
+    } catch {
       toast.error(`failed to ${action} server`, {
         description: "please try again later",
       })
