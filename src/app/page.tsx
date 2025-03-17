@@ -43,6 +43,7 @@ export default function Home() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [copied, setCopied] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [useExternalAdmin, setUseExternalAdmin] = useState(true)
   const serverIP = "mc.veygax.dev"
 
   useEffect(() => {
@@ -264,6 +265,7 @@ export default function Home() {
 
               <div className="flex items-center gap-2">
                 {lastUpdated && <span>updated: {lastUpdated.toLocaleTimeString()}</span>}
+
                 {isAuthenticated ? (
                   <a
                     href="#"
@@ -275,6 +277,15 @@ export default function Home() {
                     title="looks like you dm'ed veygax :O"
                   >
                     logout
+                  </a>
+                ) : useExternalAdmin ? (
+                  <a
+                    href="https://mc-admin.veygax.dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                  >
+                    server controls
                   </a>
                 ) : (
                   <ServerControls isAuthenticated={isAuthenticated} onAuthenticate={handleAuthenticate} />
