@@ -43,7 +43,7 @@ export default function Home() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [copied, setCopied] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [useExternalAdmin, setUseExternalAdmin] = useState(true)
+  const [useExternalAdmin] = useState(true)
   const serverIP = "mc.veygax.dev"
 
   useEffect(() => {
