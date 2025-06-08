@@ -44,7 +44,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [useExternalAdmin] = useState(true)
-  const serverIP = "mc.veygax.dev"
+  const serverIP = "play.veygax.dev"
 
   useEffect(() => {
     // Check if user has stored credentials
