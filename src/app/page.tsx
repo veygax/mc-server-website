@@ -10,7 +10,6 @@ import FluidBackground from "@/components/fluid-background";
 import { FaGithub } from "react-icons/fa";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import ServerControls from "@/components/server-controls";
-import { toast } from "sonner";
 
 interface ServerResponse {
   online: boolean
@@ -42,24 +41,14 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [copied, setCopied] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [useExternalAdmin] = useState(true)
-  const serverIP = "play.veygax.dev"
-
-  useEffect(() => {
-    // Check if user has stored credentials
-    const hasStoredAuth = localStorage.getItem("mc_server_auth") !== null
-    if (hasStoredAuth) {
-      setIsAuthenticated(true)
-    }
-  }, [])
+  const serverIP = "mc.veygax.dev:47061"
 
   const fetchServerStatus = async () => {
     setLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`https://api.mcstatus.io/v2/status/java/${serverIP}`)
+      const response = await fetch(`https://api.mcstatus.io/v2/status/bedrock/${serverIP}`)
 
       if (!response.ok) {
         throw new Error("failed to fetch server status")
@@ -102,21 +91,9 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const handleAuthenticate = () => {
-    setIsAuthenticated(true)
-  }
-
-  const handleLogout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem("mc_server_auth")
-    toast("logged out successfully")
-  }
-
   return (
     <main className="h-screen w-full flex items-center justify-center p-4 overflow-hidden">
       <FluidBackground />
-      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=100&width=100')] opacity-5 bg-repeat z-0 pointer-events-none"></div>
-
       <div className="max-w-md w-full z-10 pointer-events-auto">
         <Card className="border-2 border-emerald-600/50 bg-black/80 backdrop-blur-sm shadow-xl">
           <CardHeader className="pb-2">
@@ -226,17 +203,7 @@ export default function Home() {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3">
-            {isAuthenticated ? (
-              <ServerControls isAuthenticated={isAuthenticated} onAuthenticate={handleAuthenticate} />
-            ) : (
-              <Button
-                variant="default"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 lowercase"
-                onClick={() => window.open("https://discord.com/users/1119938236245094521", "_blank")}
-              >
-                dm veygax on discord
-              </Button>
-            )}
+            <ServerControls isServerOffline={isServerOffline} />
 
             <Button
               variant="outline"
@@ -266,30 +233,6 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 {lastUpdated && <span>updated: {lastUpdated.toLocaleTimeString()}</span>}
 
-                {isAuthenticated ? (
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      handleLogout()
-                    }}
-                    className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
-                    title="looks like you dm'ed veygax :O"
-                  >
-                    logout
-                  </a>
-                ) : useExternalAdmin ? (
-                  <a
-                    href="https://mc-admin.veygax.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
-                  >
-                    server controls
-                  </a>
-                ) : (
-                  <ServerControls isAuthenticated={isAuthenticated} onAuthenticate={handleAuthenticate} />
-                )}
               </div>
             </div>
             
@@ -332,4 +275,3 @@ export default function Home() {
     </main>
   )
 }
-
