@@ -1,16 +1,11 @@
 import { NextResponse } from 'next/server'
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 const EXAROTON_API_KEY = process.env.EXAROTON_API_KEY
 const EXAROTON_SERVER_ID = process.env.EXAROTON_SERVER_ID
 
 export async function POST(request: Request) {
   try {
-    const { action, password } = await request.json()
-
-    if (!password || password !== ADMIN_PASSWORD) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const { action } = await request.json()
 
     if (action === 'verify') {
       return NextResponse.json({ success: true })
