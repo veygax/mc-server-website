@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true })
     }
 
-    if (!['start', 'stop'].includes(action)) {
+    if (!['start'].includes(action)) {
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
     }
 
